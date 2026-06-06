@@ -134,6 +134,8 @@ def create_expense():
     if data.get('date'):
         try:
             expense_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
+            if expense_date > date.today():
+                return jsonify({'error': 'Date cannot be in the future'}), 400
         except ValueError:
             return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
     
@@ -188,7 +190,10 @@ def update_expense(expense_id):
     # Update date
     if data.get('date'):
         try:
-            expense.date = datetime.strptime(data['date'], '%Y-%m-%d').date()
+            new_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
+            if new_date > date.today():
+                return jsonify({'error': 'Date cannot be in the future'}), 400
+            expense.date = new_date
         except ValueError:
             return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
     

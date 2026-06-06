@@ -144,19 +144,20 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Insights */}
-      {insights.length > 0 && (
-        <div className="space-y-2">
-          {insights.map((insight, index) => (
-            <div
-              key={index}
-              className={`p-4 rounded-lg border-l-4 ${
-                insight.type === 'danger' ? 'bg-red-50 border-red-500' :
-                insight.type === 'warning' ? 'bg-yellow-50 border-yellow-500' :
-                insight.type === 'success' ? 'bg-green-50 border-green-500' :
-                'bg-blue-50 border-blue-500'
+          
+          <div className="card lg:col-span-4 sm:col-span-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Highest Single Expense (This Month)</p>
+                <p className="text-2xl font-bold text-orange-600">
+                  {formatCurrency(data?.summary?.highest_expense || 0)}
+                </p>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center">
+                <span className="text-2xl">🔥</span>
+              </div>
+            </div>
+          </div>
               }`}
             >
               <p className="font-medium">{insight.title}</p>

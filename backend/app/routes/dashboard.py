@@ -43,6 +43,14 @@ def get_dashboard():
         extract('month', Expense.date) == month,
         extract('year', Expense.date) == year
     ).count()
+
+    # Get highest single expense
+    highest_expense = Expense.query.filter(
+        Expense.user_id == current_user_id,
+        extract('month', Expense.date) == month,
+        extract('year', Expense.date) == year
+    ).order_by(Expense.amount.desc()).first()
+    highest_expense_amount = float(highest_expense.amount) if highest_expense else 0.0
     
     # Get spending by category
     category_spending = db.session.query(
@@ -121,7 +129,8 @@ def get_dashboard():
             'total_budget': float(total_budget),
             'remaining_budget': float(total_budget) - float(total_spent),
             'expense_count': expense_count,
-            'budget_utilization': round((float(total_spent) / float(total_budget) * 100), 1) if total_budget > 0 else 0
+            'budget_utilization': round((float(total_spent) / float(total_budget) * 100), 1) if total_budget > 0 else 0,
+            'highest_expense': highest_expense_amount
         },
         'spending_by_category': [
             {
