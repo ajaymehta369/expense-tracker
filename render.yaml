@@ -24,7 +24,7 @@ services:
           name: expenseflow-db
           property: connectionString
       - key: CORS_ORIGINS
-        value: https://expenseflow-frontend.onrender.com
+        value: https://expenseflow-frontend-wzrd.onrender.com
     healthCheckPath: /api/health
 
   # Frontend Static Site
@@ -35,7 +35,7 @@ services:
     staticPublishPath: frontend/build
     envVars:
       - key: REACT_APP_API_URL
-        value: https://expenseflow-api.onrender.com/api
+        value: https://expenseflow-api-3zef.onrender.com/api
     routes:
       - type: rewrite
         source: /*
