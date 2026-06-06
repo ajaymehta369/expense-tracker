@@ -1,0 +1,49 @@
+# Render Blueprint for ExpenseFlow
+# https://render.com/docs/blueprint-spec
+
+services:
+  # Backend API Service
+  - type: web
+    name: expenseflow-api
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && gunicorn run:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: expenseflow-db
+          property: connectionString
+      - key: CORS_ORIGINS
+        value: https://expenseflow-frontend.onrender.com
+    healthCheckPath: /api/health
+
+  # Frontend Static Site
+  - type: web
+    name: expenseflow-frontend
+    runtime: static
+    region: oregon
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://expenseflow-api.onrender.com/api
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+# Database
+databases:
+  - name: expenseflow-db
+    plan: free
+    region: oregon
+    databaseName: expense_tracker
