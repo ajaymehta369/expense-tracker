@@ -29,7 +29,6 @@ services:
   - type: web
     name: expenseflow-frontend
     runtime: static
-    region: oregon
     plan: free
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/build
